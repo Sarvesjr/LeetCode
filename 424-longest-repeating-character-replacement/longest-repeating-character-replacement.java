@@ -6,10 +6,10 @@ class Solution {
         int maxf=0;
 
         for(int r=0;r<s.length();r++){
-            char ch = s.charAt(r);
-            count.put(ch,count.getOrDefault(ch,0)+1);
+            char rightch = s.charAt(r);
+            count.put(rightch,count.getOrDefault(rightch,0)+1);
 
-            maxf=Math.max(maxf,count.get(ch));
+            maxf=Math.max(maxf,count.get(rightch));
 
             while((r-l+1) - maxf > k){
                 char leftch = s.charAt(l);
