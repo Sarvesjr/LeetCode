@@ -6,17 +6,25 @@ class Solution(object):
         :rtype: int
         """
         count={}
-        res=0
-        l=0
-        maxf=0
+        left=0
+        maxFreq=0
+        result=0
+        #add freqs to count
+        for right in range(len(s)):
+            count[s[right]]=count.get(s[right],0)+1
 
-        for r in range(len(s)):
-            count[s[r]]=1+count.get(s[r],0)
-            maxf=max(maxf,count[s[r]])
+            #find most frequent character
+            maxFreq=max(maxFreq,count[s[right]])
 
-            while(r-l+1)-maxf > k:
-                count[s[l]]-=1
-                l+=1
+            #update replacements to windowSize-maxFreq
+            replacements=(right-left+1)-maxFreq
 
-            res=max(res,r-l+1)
-        return res
+            #if replacements exceed k, move window left
+            while replacements>k:
+                count[s[left]]-=1
+                left+=1
+                replacements=(right-left+1)-maxFreq
+
+            #save largest window and return
+            result=max(result,right-left+1)
+        return result
