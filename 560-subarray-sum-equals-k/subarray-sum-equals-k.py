@@ -5,13 +5,13 @@ class Solution(object):
         :type k: int
         :rtype: int
         """
-        count={0: 1}
-        curr_prefix,answer=0,0
-        for num in nums: #take each number
-            curr_prefix += num #update current prefix sum
+        seen={0:1}
+        total,answer=0,0
 
-            if curr_prefix-k in count: #check if we have already seen the reuired previous sum
-                answer += count[curr_prefix-k] #add how many times we saw it
-
-            count[curr_prefix] = count.get(curr_prefix,0)+1 #update the sum
+        for num in nums:
+            total+=num
+            req = total-k
+            if req in seen:
+                answer += seen[req]
+            seen[total]=seen.get(total,0)+1
         return answer
