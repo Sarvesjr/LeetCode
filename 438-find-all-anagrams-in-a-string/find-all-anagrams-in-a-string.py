@@ -5,26 +5,30 @@ class Solution(object):
         :type p: str
         :rtype: List[int]
         """
-        mapP={}
-        for i in range(len(p)):
-            mapP[p[i]]=mapP.get(p[i],0)+1
-
-        mapW={}
-
+        need={}
+        window={}
         result=[]
-        left,right=0,0
 
-        while(right<len(s)):
-            mapW[s[right]]=mapW.get(s[right],0)+1
-            #if window size exceeds p then remove left element and delete it
-            if (right-left+1)>len(p):
-                mapW[s[left]]-=1
-                if mapW[s[left]]==0:
-                    del mapW[s[left]]
+        #update need map
+        for ch in p:
+            need[ch]=need.get(ch,0)+1
+
+        #update window map
+        left=0
+        for right in range(len(s)):
+            ch=s[right]
+            window[ch]=window.get(ch,0)+1
+            
+            #check window length exceeds condition then move right
+            if right-left+1 > len(p):
+                leftchar=s[left]
+                window[leftchar]-=1
+                if window[leftchar]==0:
+                    del window[leftchar]
                 left+=1
-            #if window matches p then find frequencies and append result
-            if(right-left+1)==len(p):
-                if mapP==mapW:
-                    result.append(left)
-            right+=1
+
+            #if matching then append left to result
+            if window == need:
+                result.append(left)
+
         return result
