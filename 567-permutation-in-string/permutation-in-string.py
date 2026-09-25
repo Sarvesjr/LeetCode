@@ -5,34 +5,22 @@ class Solution(object):
         :type s2: str
         :rtype: bool
         """
-        if len(s1)>len(s2):
+        n1=len(s1)
+        n2=len(s2)
+        if n1>n2:
             return False
 
-        map1={}
-        map2={}
+        s1_counts=[0]*26
+        s2_counts=[0]*26
 
-        #add map1
-        for ch in s1:
-            map1[ch]=map1.get(ch,0)+1
-
-        left=0
-        right=0
-        k=len(s1)
-        
-        while right < len(s2):
-            #add right character in map2:
-            map2[s2[right]]=map2.get(s2[right],0)+1
-
-            #if window size exceeds k:
-            if(right-left+1)>k:
-                map2[s2[left]]-=1 #removing left from freq map
-                if map2[s2[left]]==0:
-                    del map2[s2[left]] #removing character from map if freq 0
-                left+=1
-            
-            #if window size equals k: check if both maps match:
-            if(right-left+1)==k:
-                if map1==map2:
-                    return True
-            right+=1
+        for i in range(n1):
+            s1_counts[ord(s1[i])-ord('a')]+=1
+            s2_counts[ord(s2[i])-ord('a')]+=1
+        if s1_counts==s2_counts:
+            return True
+        for i in range(n1,n2):
+            s2_counts[ord(s2[i])-ord('a')]+=1
+            s2_counts[ord(s2[i-n1])-ord('a')]-=1
+            if s1_counts==s2_counts:
+                return True
         return False
