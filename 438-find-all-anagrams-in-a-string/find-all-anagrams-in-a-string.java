@@ -13,7 +13,9 @@ class Solution {
         List<Integer> result = new ArrayList<>(); //syntax doubt
 
         while(right<s.length()){
+            //update window
             mapW.put(s.charAt(right),mapW.getOrDefault(s.charAt(right),0)+1);
+
             //window length check
             if((right-left+1)>p.length()){
                 char ch = s.charAt(left);
@@ -23,7 +25,7 @@ class Solution {
                 }
                 left++;
             }
-            //check frequencies
+            //check frequencies match
             if((right-left+1)==p.length()){
                 if (mapP.equals(mapW)){
                     result.add(left);
