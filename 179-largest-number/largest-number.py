@@ -1,0 +1,18 @@
+class Solution(object):
+    def largestNumber(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: str
+        """
+        nums=[str(x) for x in nums]
+        from functools import cmp_to_key
+        def compare(a,b):
+            if a+b > b+a :
+                return -1
+            else:
+                return 1
+        nums.sort(key=cmp_to_key(compare))
+
+        if nums[0]=="0":
+            return "0"
+        return ''.join(nums)
