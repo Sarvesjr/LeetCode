@@ -4,7 +4,7 @@ class Solution(object):
         :type n: int
         :rtype: int
         """
-        one,two = 1,1
+        prev,curr = 1,1
         for i in range(n-1):
-            one,two = one+two, one
-        return one
+            curr, prev = curr+prev, curr
+        return curr
