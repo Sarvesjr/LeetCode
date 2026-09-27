@@ -8,6 +8,8 @@ class Solution(object):
         """
         :type head: Optional[ListNode]
         :rtype: Optional[ListNode]
+
+        Recursive Method:
         
         if head is None or head.next is None:
             return head
