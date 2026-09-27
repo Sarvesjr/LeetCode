@@ -4,19 +4,14 @@ class Solution(object):
         :type s: str
         :rtype: bool
         """
-        hashmap={'(':')', '{':'}','[':']'}
+        pairs={')':'(', ']':'[', '}':'{'}
         stack=[]
 
-        for b in s:
-            if b in hashmap:
-                stack.append(b)
+        for ch in s:
+            if ch in '([{':
+                stack.append(ch)
             else:
-                if not stack:
+                if not stack or stack[-1] != pairs[ch]:
                     return False
-
-                popped = stack.pop()
-
-                if hashmap[popped] != b :
-                    return False
-
-        return len(stack) == 0
+                stack.pop()
+        return len(stack)==0
