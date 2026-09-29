@@ -5,4 +5,4 @@ class Solution(object):
         :type high: int
         :rtype: int
         """
-        return (high + 1) / 2 - low / 2
+        return (high + 1)/2 - low/2
