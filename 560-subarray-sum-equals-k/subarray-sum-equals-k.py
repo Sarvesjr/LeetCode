@@ -5,13 +5,12 @@ class Solution(object):
         :type k: int
         :rtype: int
         """
-        seen={0:1}
-        total,answer=0,0
-
+        prefixSum = 0
+        count = 0
+        freq = {0:1}
         for num in nums:
-            total+=num
-            req = total-k
-            if req in seen:
-                answer += seen[req]
-            seen[total]=seen.get(total,0)+1
-        return answer
+            prefixSum += num
+            if (prefixSum - k) in freq:
+                count += freq[prefixSum - k]
+            freq[prefixSum] = freq.get(prefixSum,0)+1
+        return count
