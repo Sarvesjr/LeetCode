@@ -4,14 +4,12 @@ class Solution(object):
         :type intervals: List[List[int]]
         :rtype: List[List[int]]
         """
-        intervals.sort(key = lambda i : i[0]) # sort by start
-        output = [intervals[0]] # save into output
+        intervals.sort()
+        result = []
 
-        for start,end in intervals[1:]:
-            lastEnd = output[-1][1] # end of last element
-
-            if start <= lastEnd: # if current start less than prev element's end then it overlaps
-                output[-1][1] =  max(lastEnd, end) #update the lastEnd to the highest no
+        for start, end in intervals:
+            if result and start <= result[-1][1]:
+                result[-1][1] = max(result[-1][1], end)
             else:
-                output.append([start,end]) # if they don't overlap then simply append to output
-        return output
+                result.append([start, end])
+        return result
