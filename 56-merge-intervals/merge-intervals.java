@@ -1,33 +1,23 @@
 class Solution {
     public int[][] merge(int[][] intervals) {
-        // Sort by starting value
-        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
-        List<int[]> output = new ArrayList<>();
-        output.add(intervals[0]);
+        Arrays.sort(intervals,(a,b) -> a[0]-b[0]);
 
-        // Check remaining intervals
-        for (int i = 1; i < intervals.length; i++) {
+        List<int[]> ans = new ArrayList<>();
+        int[] prev = intervals[0];
 
-            int start = intervals[i][0];
-            int end = intervals[i][1];
+        for(int i = 1; i < intervals.length; i++){
+            int[] curr = intervals[i];
 
-            // Last interval in output
-            int[] last = output.get(output.size() - 1);
-
-            // Overlap
-            if (start <= last[1]) {
-
-                // Extend the end
-                last[1] = Math.max(last[1], end);
-
+            if(curr[0] <= prev[1]){
+                prev[1] = Math.max(prev[1], curr[1]);
             }
-            else {
-
-                // No overlap
-                output.add(new int[]{start, end});
+            else{
+                ans.add(prev);
+                prev = curr;
             }
         }
 
-        return output.toArray(new int[output.size()][]);
+        ans.add(prev);
+        return ans.toArray(new int[ans.size()][]);
     }
 }
