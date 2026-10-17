@@ -8,19 +8,19 @@ class Solution(object):
         r = len(matrix)
         c = len(matrix[0])
         total = r*c
-        lo = 0
-        hi = total-1
+        left = 0
+        right = total-1
 
-        while lo <= hi:
-            mid = lo+(hi-lo)//2
-            
+        while left <= right:
+            mid = left+(right-left)//2
+
             rp = mid//c
             cp = mid%c
 
             if matrix[rp][cp] < target:
-                lo = mid+1
+                left = mid+1
             elif matrix[rp][cp] > target:
-                hi = mid-1
+                right = mid-1
             else:
                 return True
         return False
