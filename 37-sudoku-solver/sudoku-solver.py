@@ -1,51 +1,87 @@
 class Solution(object):
     def solveSudoku(self, board):
-        """
-        :type board: List[List[str]]
-        :rtype: None Do not return anything, modify board in-place instead.
-        """
-        # Pre-populate tracking sets for rows, columns, and 3x3 boxes
-        rows = [set() for _ in range(9)]
-        cols = [set() for _ in range(9)]
-        boxes = [set() for _ in range(9)]
+        FULL = 511  # 0b111111111
+
+        rows = [0] * 9
+        cols = [0] * 9
+        boxes = [0] * 9
+        empty = []
+
+        # Fast population count for every possible 9-bit mask
+        popcount = [0] * 512
+        for i in range(1, 512):
+            popcount[i] = popcount[i >> 1] + (i & 1)
 
         for r in range(9):
             for c in range(9):
-                val = board[r][c]
-                if val != '.':
-                    rows[r].add(val)
-                    cols[c].add(val)
-                    boxes[(r // 3) * 3 + (c // 3)].add(val)
+                ch = board[r][c]
 
-        def backtrack(r, c):
-            if r == 9:
+                if ch == '.':
+                    empty.append((r, c, (r // 3) * 3 + c // 3))
+                else:
+                    bit = 1 << (ord(ch) - 49)
+                    b = (r // 3) * 3 + c // 3
+
+                    rows[r] |= bit
+                    cols[c] |= bit
+                    boxes[b] |= bit
+
+        n = len(empty)
+
+        def solve(pos):
+            if pos == n:
                 return True
-            
-            next_r, next_c = (r, c + 1) if c < 8 else (r + 1, 0)
 
-            if board[r][c] != '.':
-                return backtrack(next_r, next_c)
+            best = pos
+            best_count = 10
 
-            box_idx = (r // 3) * 3 + (c // 3)
-            
-            for num_int in range(1, 10):
-                num = str(num_int)
-                if num not in rows[r] and num not in cols[c] and num not in boxes[box_idx]:
-                    # Place number
-                    board[r][c] = num
-                    rows[r].add(num)
-                    cols[c].add(num)
-                    boxes[box_idx].add(num)
+            # MRV: choose the cell with the fewest candidates
+            for i in range(pos, n):
+                r, c, b = empty[i]
 
-                    if backtrack(next_r, next_c):
-                        return True
+                mask = FULL ^ (
+                    (rows[r] | cols[c] | boxes[b]) & FULL
+                )
 
-                    # Backtrack (remove number)
-                    board[r][c] = '.'
-                    rows[r].remove(num)
-                    cols[c].remove(num)
-                    boxes[box_idx].remove(num)
+                count = popcount[mask]
+
+                if count < best_count:
+                    best_count = count
+                    best = i
+
+                    if count <= 1:
+                        break
+
+            if best_count == 0:
+                return False
+
+            empty[pos], empty[best] = empty[best], empty[pos]
+
+            r, c, b = empty[pos]
+            mask = FULL ^ (
+                (rows[r] | cols[c] | boxes[b]) & FULL
+            )
+
+            while mask:
+                bit = mask & -mask
+                mask ^= bit
+
+                rows[r] |= bit
+                cols[c] |= bit
+                boxes[b] |= bit
+
+                board[r][c] = chr(48 + bit.bit_length())
+
+                if solve(pos + 1):
+                    return True
+
+                rows[r] ^= bit
+                cols[c] ^= bit
+                boxes[b] ^= bit
+
+            board[r][c] = '.'
+            empty[pos], empty[best] = empty[best], empty[pos]
 
             return False
 
-        backtrack(0, 0)
+        solve(0)
