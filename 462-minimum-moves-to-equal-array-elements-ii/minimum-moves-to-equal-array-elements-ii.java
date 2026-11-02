@@ -27,5 +27,3 @@ class Solution {
         int t = a[i]; a[i] = a[j]; a[j] = t;
     }
 }
-
-
