@@ -6,14 +6,10 @@ class Solution(object):
         :type d: int
         :rtype: int
         """
-        c = 0
-        for n in arr1:
-            if self.isValid(n, arr2, d):
-                c += 1
-        return c
-
-    def isValid(self, n, arr, d):
-        for e in arr:
-            if abs(e - n) <= d:
-                return False
-        return True
+        arr2.sort()
+        res = 0
+        for x in arr1:
+            i = bisect.bisect_left(arr2, x - d)
+            if i == len(arr2) or arr2[i] > x + d:
+                res += 1
+        return res
