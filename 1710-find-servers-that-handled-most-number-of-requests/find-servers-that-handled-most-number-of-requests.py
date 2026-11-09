@@ -1,24 +1,21 @@
-from heapq import heappush, heappop
-from collections import Counter
-
 class Solution(object):
     def busiestServers(self, k, arrival, load):
-        free = list(range(k))
-        handled = []
-        busy = []
-
-        for i, (t, d) in enumerate(zip(arrival, load)):
-            while busy and busy[0][0] <= t:
-                end, server = heappop(busy)
-                heappush(free, i + (server - i) % k)
-
-            if free:
-                x = heappop(free) % k
-                heappush(busy, (t + d, x))
-                handled.append(x)
-
-        counts = Counter(handled)
-        maximum = max(counts.values())
-
-        return [server for server in range(k)
-                if counts[server] == maximum]
+        """
+        :type k: int
+        :type arrival: List[int]
+        :type load: List[int]
+        :rtype: List[int]
+        """
+        available = list(range(k))
+        busy=[]
+        res = [0] * k
+        for i, a in enumerate(arrival):
+            while busy and busy[0][0] <= a:
+                _, x = heapq.heappop(busy)
+                heapq.heappush(available, i + (x-i)%k)
+            if available:
+                j = heapq.heappop(available) % k
+                heapq.heappush(busy, (a+load[i], j))
+                res[j] += 1
+        a= max(res)
+        return [i for i in range(k) if res[i] == a]
