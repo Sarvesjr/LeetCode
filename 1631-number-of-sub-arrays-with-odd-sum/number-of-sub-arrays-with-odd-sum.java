@@ -1,26 +1,12 @@
 class Solution {
     public int numOfSubarrays(int[] arr) {
-        long even = 1;       // Empty prefix sum is even
-        long odd = 0;        // No odd prefix sum initially
-        long preSum = 0;     // Running prefix sum
-        long count = 0;      // Number of odd-sum subarrays
-
-        int MOD = 1000000007;
-
-        for (int num : arr) {
-            preSum += num;
-
-            if (preSum % 2 == 0) {
-                count += odd;
-                even++;
-            } else {
-                count += even;
-                odd++;
-            }
-
-            count %= MOD;
+        int sum = 0;
+        long prefOdds = 0;
+        for(int i = 0; i < arr.length; i++) {
+            sum += arr[i];
+            prefOdds += sum % 2;
         }
-
-        return (int) (count % MOD);
+        prefOdds += (arr.length - prefOdds) * prefOdds;
+        return (int) (prefOdds % 1000000007);
     }
 }
