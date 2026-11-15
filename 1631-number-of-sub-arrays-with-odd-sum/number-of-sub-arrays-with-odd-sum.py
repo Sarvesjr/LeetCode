@@ -1,9 +1,15 @@
-class Solution:
+class Solution(object):
     def numOfSubarrays(self, arr):
-        p = int(''.join('1' if x % 2 else '0' for x in arr), 2)
-        s = 1
-        while s < len(arr):
-            p ^= p >> s
-            s <<= 1
-        odd = bin(p).count('1')
-        return (odd * (len(arr) + 1 - odd)) % (10**9 + 7)
+        even = 1          # Empty prefix sum is even
+        odd = 0           # No odd prefix sum initially
+        preSum = 0        # Running prefix sum
+        count = 0         # Number of odd-sum subarrays
+        for num in arr:
+            preSum += num
+            if preSum % 2 == 0:
+                count += odd      # Even - Odd = Odd
+                even += 1
+            else:
+                count += even     # Odd - Even = Odd
+                odd += 1
+        return count % (10**9 + 7)
