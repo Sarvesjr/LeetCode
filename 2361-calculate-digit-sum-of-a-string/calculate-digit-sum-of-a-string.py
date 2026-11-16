@@ -6,11 +6,5 @@ class Solution(object):
         :rtype: str
         """
         while len(s) > k:
-            next_s = ""
-            for i in range(0, len(s), k):
-                total = 0
-                for j in range(i, min(i + k, len(s))):
-                    total += int(s[j])
-                next_s += str(total)
-            s = next_s
+            s = ''.join(str(sum(int(c) for c in s[i:i + k])) for i in range(0, len(s), k))
         return s
