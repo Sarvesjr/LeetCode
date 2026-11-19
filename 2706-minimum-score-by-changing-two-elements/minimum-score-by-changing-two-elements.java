@@ -1,21 +1,45 @@
 class Solution {
     public int minimizeSum(int[] nums) {
-        int[] small = new int[3], neg = new int[3];  // the 3 smallest values, and the 3 smallest negated ones: minus the 3 largest
-        Arrays.fill(small, Integer.MAX_VALUE);
-        Arrays.fill(neg, Integer.MAX_VALUE);
-        for (int x : nums) {
-            keep(small, x);
-            keep(neg, -x);
+        int sm1=Integer.MAX_VALUE;
+        int sm2=Integer.MAX_VALUE;
+        int sm3=Integer.MAX_VALUE;
+        int max1=Integer.MIN_VALUE;
+        int max2=Integer.MIN_VALUE;
+        int max3=Integer.MIN_VALUE;
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]>max3){
+                if(nums[i]>max2){
+                    if(nums[i]>max1){
+                        max3=max2;
+                        max2=max1;
+                        max1=nums[i];
+                    }
+                    else{
+                        max3=max2;
+                        max2=nums[i];
+                    }
+                }
+                else{
+                    max3=nums[i];
+                }
+            }
+            if(nums[i]<sm3){
+                if(nums[i]<sm2){
+                    if(nums[i]<sm1){
+                        sm3=sm2;
+                        sm2=sm1;
+                        sm1=nums[i];
+                    }
+                    else{
+                        sm3=sm2;
+                        sm2=nums[i];
+                    }
+                }
+                else{
+                    sm3=nums[i];
+                }
+            }
         }
-        return Math.min(-neg[0] - small[2], Math.min(-neg[1] - small[1], -neg[2] - small[0]));
-    }
-
-    private void keep(int[] three, int x) {  // three: the 3 smallest values so far, ascending
-        if (x >= three[2])
-            return;
-        int i = 2;
-        for (; i > 0 && three[i - 1] > x; i--)
-            three[i] = three[i - 1];
-        three[i] = x;
+        return Math.min(Math.min(max1-sm3,max3-sm1),max2-sm2);
     }
 }
