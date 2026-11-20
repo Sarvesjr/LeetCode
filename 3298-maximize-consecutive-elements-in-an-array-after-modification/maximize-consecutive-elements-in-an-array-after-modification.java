@@ -1,22 +1,33 @@
 class Solution {
-    public int maxSelectedElements(int[] nums) {
-        Arrays.sort(nums);
-        Map<Integer, Integer> dp = new HashMap<>();
-        int maxLen = 0;
+  public int maxSelectedElements(int[] nums) {
+    int ans = 1;
+    int prev = Integer.MIN_VALUE;
+    // the length of the longest consecutive elements (seq0) ending in the
+    // previous number
+    int dp0 = 1;
+    // the length of the longest consecutive elements (seq1) ending in the
+    // previous number + 1
+    int dp1 = 1;
 
-        for (int x : nums) {
-            int v1 = dp.getOrDefault(x, 0) + 1;
-            int v2 = dp.getOrDefault(x - 1, 0) + 1;
+    Arrays.sort(nums);
 
-            int nextVal = Math.max(dp.getOrDefault(x + 1, 0), v1);
-            int currVal = Math.max(dp.getOrDefault(x, 0), v2);
-
-            dp.put(x + 1, nextVal);
-            dp.put(x, currVal);
-
-            maxLen = Math.max(maxLen, Math.max(nextVal, currVal));
-        }
-
-        return maxLen;
+    for (final int num : nums) {
+      if (num == prev) {
+        dp1 = dp0 + 1; // Append `num + 1` to seq0.
+      } else if (num == prev + 1) {
+        ++dp0; // Append `num` to seq0.
+        ++dp1; // Add 1 to every number in seq0 and append `num + 1` to seq0.
+      } else if (num == prev + 2) {
+        dp0 = dp1 + 1; // Append `num` to seq1.
+        dp1 = 1;       // Start a new sequence [`num + 1`].
+      } else {
+        dp0 = 1; // Start a new sequence [`num`].
+        dp1 = 1; // Start a new sequence [`num + 1`].
+      }
+      ans = Math.max(ans, Math.max(dp0, dp1));
+      prev = num;
     }
+
+    return ans;
+  }
 }
