@@ -1,13 +1,7 @@
 class ProductOfNumbers(object):
-
     def __init__(self):
         self.li = [1]
-
     def add(self, num):
-        """
-        :type num: int
-        :rtype: None
-        """
         if num == 0:
             self.li = [1]
         else:
@@ -26,14 +20,7 @@ class ProductOfNumbers(object):
                 self.li.append(num)
             else:
                 self.li.append(num * self.li[-1])
-
-        
-
     def getProduct(self, k):
-        """
-        :type k: int
-        :rtype: int
-        """
         if k >= len(self.li):
             return 0
         return self.li[-1]//self.li[-k-1]
@@ -46,9 +33,3 @@ class ProductOfNumbers(object):
         if ind == -1 :
             return self.li[-1]
         return self.li[-1] // self.li[ind]
-
-
-# Your ProductOfNumbers object will be instantiated and called as such:
-# obj = ProductOfNumbers()
-# obj.add(num)
-# param_2 = obj.getProduct(k)
